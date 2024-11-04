@@ -3,11 +3,12 @@ import multiprocessing as mp
 from time import sleep
 import warnings
 
+from mynx.callbacks import Callback
+from mynx.logs import Logs
 from mynx.src import Cycle
 
-class DataLoader(ABC):
-    def __init__(self, batch_size: int, use_multiprocesing:bool = True, num_workers:int = None, max_queued_batches: int = 8, warmup_queue:bool = True, disable_warnings:bool = False):
-        self.batch_size = batch_size
+class DataLoader(Callback, ABC):
+    def __init__(self, use_multiprocesing:bool = True, num_workers:int = None, max_queued_batches: int = 8, warmup_queue:bool = True, disable_warnings:bool = False):
         if not num_workers:
             num_workers = mp.cpu_count()
         self.use_multiprocesing = use_multiprocesing
@@ -50,6 +51,9 @@ class DataLoader(ABC):
             batch_idx = queue.get()
             batch = self.get_batch(batch_idx)
             self._batch_queue.put(batch)
+
+    def on_step_start(self, step:int, logs:Logs):
+        logs.batch = next(self)
 
     def __next__(self):
         if not self.use_multiprocesing:

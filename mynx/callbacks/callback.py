@@ -4,19 +4,19 @@ class Callback:
     def __init__(self):
         ...
 
-    def on_train_start(self, logs:Logs):
+    def on_train_start(self, logs:Logs) -> None | str:
         ...
 
     def on_train_end(self, logs:Logs):
         ...
 
-    def on_step_start(self, batch:int, logs:Logs):
+    def on_step_start(self, step:int, logs:Logs):
         ...
 
-    def on_step_end(self, batch:int, logs:Logs):
+    def on_step_end(self, step:int, logs:Logs):
         ...
 
-    def on_epoch_start(self, epoch:int, logs:Logs):
+    def on_epoch_start(self, epoch:int, logs:Logs) -> None | str:
         ...
 
     def on_epoch_end(self, epoch:int, logs:Logs):
